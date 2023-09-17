@@ -1,0 +1,33 @@
+[package]
+name = "jwt-tui"
+description = "A terminal UI for JWTs (JSON Web Tokens) that allows you to decode, verify and generate JWTs."
+authors = ["Awiteb <awiteb@hotmail.com>"]
+license = "MIT"
+repository = "https://github.com/theawiteb/jwt-tui"
+documentation = "https://docs.rs/jwt-tui/latest/jwt-tui/"
+readme = "README.md"
+keywords = ["jwt", "tui", "terminal", "ui"]
+categories = ["command-line-utilities"]
+version = "0.1.0"
+edition = "2021"
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+crossterm = "0.27.0"
+directories = "5.0.1"
+impl_new = "0.2.1"
+log = "0.4.20"
+ratatui = { version = "0.23.0", features = ["all-widgets"] }
+simplelog = { version = "0.12.1", default-features = false, features = [
+    "local-offset",
+] }
+ratatui-textarea = "0.3"
+
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+opt-level = "s"
