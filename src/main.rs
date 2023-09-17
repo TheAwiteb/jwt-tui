@@ -36,32 +36,36 @@ fn main() -> AppResult<()> {
     init_logger();
     log::info!("Starting jwt-tui");
 
-    // Create an application.
-    let mut app = App::new();
+    if std::env::args().any(|arg| arg == "--version" || arg == "-v") {
+        println!("jwt-tui v{}", env!("CARGO_PKG_VERSION"));
+    } else {
+        // Create an application.
+        let mut app = App::new();
 
-    // Initialize the terminal user interface.
-    let backend = CrosstermBackend::new(io::stderr());
-    let terminal = Terminal::new(backend)?;
-    let events = EventHandler::new(250);
-    let mut tui = Tui::new(terminal, events);
-    tui.init()?;
-    log::info!("Initialized the terminal user interface");
+        // Initialize the terminal user interface.
+        let backend = CrosstermBackend::new(io::stderr());
+        let terminal = Terminal::new(backend)?;
+        let events = EventHandler::new(250);
+        let mut tui = Tui::new(terminal, events);
+        tui.init()?;
+        log::info!("Initialized the terminal user interface");
 
-    // Start the main loop.
-    while app.running {
-        // Render the user interface.
-        tui.draw(&mut app)?;
-        // Handle events.
-        match tui.events.next()? {
-            Event::Key(key_event) => app.handle_key_event(key_event)?,
-            Event::Tick => {
-                // This gets called every 250ms if no key is pressed.
-                // This will rerender the UI if the app is running.
+        // Start the main loop.
+        while app.running {
+            // Render the user interface.
+            tui.draw(&mut app)?;
+            // Handle events.
+            match tui.events.next()? {
+                Event::Key(key_event) => app.handle_key_event(key_event)?,
+                Event::Tick => {
+                    // This gets called every 250ms if no key is pressed.
+                    // This will rerender the UI if the app is running.
+                }
             }
         }
-    }
 
-    // Exit the user interface.
-    tui.exit()?;
+        // Exit the user interface.
+        tui.exit()?;
+    }
     Ok(())
 }
